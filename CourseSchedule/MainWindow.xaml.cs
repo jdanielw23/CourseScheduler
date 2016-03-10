@@ -21,102 +21,68 @@ namespace CourseSchedule
     /// </summary>
     public partial class MainWindow : Window
     {
+        const int DAY_START = 7;
+        const int DAY_HOURS = 14;
+        ArrayList courses;
+
         public MainWindow()
         {
             InitializeComponent();
             CreateGridRows();
             CreateRowTitles();
-            
-            ArrayList courses = CreateCourses();
+
+            courses = CreateCourses();
             
             foreach(Course c in courses)
             {
                 AddCourseToGrid(c);
-            }
+            }            
         }
 
         private ArrayList CreateCourses()
         {
+            ArrayList MWF = new ArrayList();
+            MWF.Add(MeetTime.Day.Mon);
+            MWF.Add(MeetTime.Day.Wed);
+            MWF.Add(MeetTime.Day.Fri);
+
+            ArrayList TR = new ArrayList();
+            TR.Add(MeetTime.Day.Tues);
+            TR.Add(MeetTime.Day.Thur);
+
             ArrayList courses = new ArrayList();
 
-            Course capstone = new Course()
-            {
-                Name = "Capstone Design",
-                CourseCode = "EGR 401",
-                StartTime = 17.0f,
-                EndTime = 20.0f,
-                Color = Brushes.SkyBlue
-            };
-            capstone.MeetDays.Add(Course.Day.Mon);
+            Course capstone = new Course("EGR 401", "Capstone Design");
+            capstone.AddMeetTime(MeetTime.Day.Mon, 17, 0, 3f);
             courses.Add(capstone);
 
-            Course report = new Course()
-            {
-                Name = "Internship Report",
-                CourseCode = "EGR 405",
-                StartTime = 15.75f,
-                EndTime = 16.75f,
-                Color = Brushes.CornflowerBlue
-            };
-            report.MeetDays.Add(Course.Day.Wed);
+            Course report = new Course("EGR 405", "Internship Report");
+            report.AddMeetTime(MeetTime.Day.Wed, 17,0,1f);
             courses.Add(report);
 
-            Course swProjMan = new Course()
-            {
-                Name = "Software Project Management",
-                CourseCode = "EGR 427",
-                StartTime = 10.5f,
-                EndTime = 12.0f,
-                Color = Brushes.LightBlue
-            };
-            swProjMan.MeetDays.Add(Course.Day.Tues);
-            swProjMan.MeetDays.Add(Course.Day.Thur);
+            Course swProjMan = new Course("EGR 427", "Software Project Management");
+            swProjMan.AddMeetTime(TR, 10, 30, 1.5f);
             courses.Add(swProjMan);
 
-            Course mobileAppDev = new Course()
-            {
-                Name = "Mobile Application Development",
-                CourseCode = "EGR 423",
-                StartTime = 9.5f,
-                EndTime = 10.5f,
-                Color = Brushes.LightCyan
-            };
-            mobileAppDev.MeetDays.Add(Course.Day.Mon);
-            mobileAppDev.MeetDays.Add(Course.Day.Wed);
-            mobileAppDev.MeetDays.Add(Course.Day.Fri);
+            Course mobileAppDev = new Course("EGR 423", "Mobile Application Development");
+            mobileAppDev.AddMeetTime(MWF, 9, 30, 1f);
             courses.Add(mobileAppDev);
 
-            Course infoSec = new Course()
-            {
-                Name = "Information Security",
-                CourseCode = "CSC 413",
-                StartTime = 8.25f,
-                EndTime = 9.25f,
-                Color = Brushes.LightSteelBlue
-            };
-            infoSec.MeetDays.Add(Course.Day.Mon);
-            infoSec.MeetDays.Add(Course.Day.Wed);
-            infoSec.MeetDays.Add(Course.Day.Fri);
+            Course infoSec = new Course("CSC 413", "Information Security");
+            infoSec.AddMeetTime(MWF, 8, 15, 1f);
             courses.Add(infoSec);
 
-            Course marketStrat = new Course()
-            {
-                Name = "Marketplace Strategy for Global Advancement",
-                CourseCode = "ICS 405",
-                StartTime = 8.75f,
-                EndTime = 10.25f,
-                Color = Brushes.LightSkyBlue
-            };
-            marketStrat.MeetDays.Add(Course.Day.Tues);
-            marketStrat.MeetDays.Add(Course.Day.Thur);
-            courses.Add(marketStrat);
-
+            Course chem = new Course("CHE 115", "Chemistry");
+            chem.AddMeetTime(MWF, 10, 45, 1f);
+            chem.AddMeetTime(MeetTime.Day.Tues, 7, 30, 2.75f);
+            courses.Add(chem);
+            
             return courses;
         }
 
         private void CreateGridRows()
         {
-            for(int i = 0; i < 52; i++)
+            for(int i = 0; i < DAY_HOURS * 4; i++)
             {
                 RowDefinition row = new RowDefinition();
                 MainGrid.RowDefinitions.Add(row);
@@ -125,8 +91,8 @@ namespace CourseSchedule
 
         private void CreateRowTitles()
         {
-            int hour = 8;
-            for(int i = 1; i < 52; i+=4)
+            int hour = DAY_START;
+            for(int i = 1; i < DAY_HOURS * 4; i+=4)
             {
                 TextBlock txtBlock = new TextBlock();
                 txtBlock.Text = hour.ToString() + ":00";
@@ -142,27 +108,28 @@ namespace CourseSchedule
 
         private void AddCourseToGrid(Course c)
         {
-            foreach (Course.Day day in c.MeetDays)
+            foreach (MeetTime t in c.MeetTimes)
             {
-                TextBlock txtBlock = new TextBlock();
-                string startTime = TimeSpan.FromHours(c.StartTime).ToString("h\\:mm");
-                string endTime = TimeSpan.FromHours(c.EndTime).ToString("h\\:mm");
-                txtBlock.Text = startTime + " - " + endTime + "\n" + c.Name + "\n" + c.CourseCode;
-                txtBlock.HorizontalAlignment = HorizontalAlignment.Stretch;
-                txtBlock.VerticalAlignment = VerticalAlignment.Stretch;
-                txtBlock.TextAlignment = TextAlignment.Center;
-                txtBlock.FontSize = 12;
-                txtBlock.TextWrapping = TextWrapping.Wrap;
-                txtBlock.Background = c.Color;
+                foreach (MeetTime.Day day in t.MeetDays)
+                {
+                    TextBlock txtBlock = new TextBlock();
+                    txtBlock.Text = c.ToString();
+                    txtBlock.HorizontalAlignment = HorizontalAlignment.Stretch;
+                    txtBlock.VerticalAlignment = VerticalAlignment.Stretch;
+                    txtBlock.TextAlignment = TextAlignment.Center;
+                    txtBlock.FontSize = 12;
+                    txtBlock.TextWrapping = TextWrapping.Wrap;
+                    txtBlock.Background = Brushes.LightCyan;
 
-                int numRows = (int) ((c.EndTime - c.StartTime) * 4);
-                int startRow = (int) ((c.StartTime - 8) * 4 + 1);
+                    int numRows = (int)((t.GetDuration()) * 4);
+                    int startRow = (int)((t.StartTime.GetDecimalValue() - DAY_START) * 4 + 1);
 
-                Grid.SetRowSpan(txtBlock, numRows);
-                Grid.SetRow(txtBlock, startRow);
-                Grid.SetColumn(txtBlock, (int)day);
+                    Grid.SetRowSpan(txtBlock, numRows);
+                    Grid.SetRow(txtBlock, startRow);
+                    Grid.SetColumn(txtBlock, (int)day);
 
-                MainGrid.Children.Add(txtBlock);
+                    MainGrid.Children.Add(txtBlock);
+                }                
             }
         }
     }

@@ -5,49 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CourseSchedule"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1250">
-    <Grid x:Name="MainGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition x:Name="Time" Width="50"/>
-            <ColumnDefinition x:Name="Monday" Width="*"/>
-            <ColumnDefinition x:Name="Tuesday" Width="*"/>
-            <ColumnDefinition x:Name="Wednesday" Width="*"/>
-            <ColumnDefinition x:Name="Thursday" Width="*"/>
-            <ColumnDefinition x:Name="Friday" Width="*"/>
-        </Grid.ColumnDefinitions>
+        Title="MainWindow" Height="700" Width="1550">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Left" Width="300">
+            
+        </DockPanel>
+        
+        <Grid x:Name="MainGrid" DockPanel.Dock="Right">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="Time" Width="50"/>
+                <ColumnDefinition x:Name="Monday" Width="*"/>
+                <ColumnDefinition x:Name="Tuesday" Width="*"/>
+                <ColumnDefinition x:Name="Wednesday" Width="*"/>
+                <ColumnDefinition x:Name="Thursday" Width="*"/>
+                <ColumnDefinition x:Name="Friday" Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock
+            <TextBlock
             Grid.Row="0"
             Grid.Column="1"
             Text="MONDAY"
             HorizontalAlignment="Center"
             />
-        <TextBlock
+            <TextBlock
             Grid.Row="0"
             Grid.Column="2"
             Text="TUESDAY"
             HorizontalAlignment="Center"
             />
-        <TextBlock
+            <TextBlock
             Grid.Row="0"
             Grid.Column="3"
             Text="WEDNESDAY"
             HorizontalAlignment="Center"
             />
-        <TextBlock
+            <TextBlock
             Grid.Row="0"
             Grid.Column="4"
             Text="THURSDAY"
             HorizontalAlignment="Center"
             />
-        <TextBlock
+            <TextBlock
             Grid.Row="0"
             Grid.Column="5"
             Text="FRIDAY"
             HorizontalAlignment="Center"
             />
-    </Grid>
+        </Grid>
+    </DockPanel>
+    
+    
 </Window>
